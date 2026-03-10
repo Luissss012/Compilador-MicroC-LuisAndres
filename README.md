@@ -75,7 +75,6 @@ Para ejecutar el proyecto se deben seguir los siguientes pasos:
 
 A continuación se muestran algunas capturas de la aplicación en ejecución.
 
-![Interfaz del Pre-Compilador](imagenes/interfaz.png)
 
 <img width="742" height="492" alt="image" src="https://github.com/user-attachments/assets/c54213e4-42da-4d28-b4b6-7a4638d63ee1" />
 <img width="962" height="627" alt="image" src="https://github.com/user-attachments/assets/c7bd3d42-f5ee-472b-820a-f9f00bc4cf4b" />
