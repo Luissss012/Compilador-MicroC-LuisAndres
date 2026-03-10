@@ -77,7 +77,10 @@ A continuación se muestran algunas capturas de la aplicación en ejecución.
 
 ![Interfaz del Pre-Compilador](imagenes/interfaz.png)
 
-*(Puedes agregar más capturas si lo deseas)*
+<img width="742" height="492" alt="image" src="https://github.com/user-attachments/assets/c54213e4-42da-4d28-b4b6-7a4638d63ee1" />
+<img width="962" height="627" alt="image" src="https://github.com/user-attachments/assets/c7bd3d42-f5ee-472b-820a-f9f00bc4cf4b" />
+<img width="762" height="507" alt="image" src="https://github.com/user-attachments/assets/d309719e-6611-4fc8-872b-f3b156ab58fa" />
+
 
 ---
 
@@ -86,7 +89,7 @@ A continuación se muestran algunas capturas de la aplicación en ejecución.
 Se incluye un video demostrativo donde se muestra el funcionamiento del sistema.
 
 **Enlace al video:**  
-Agregar enlace aquí
+https://youtu.be/uW52Pl0jQss
 
 ---
 
