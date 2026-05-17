@@ -7,6 +7,7 @@ MicroC_PreCompilador es una aplicación desarrollada en C# con Windows Forms que
 El proyecto fue creado con el objetivo de comprender el funcionamiento interno de un compilador, especialmente el análisis léxico, la clasificación de tokens y la aplicación de teoría de autómatas.
 
 El sistema permite:
+
 - Leer código fuente carácter por carácter.
 - Detectar palabras reservadas.
 - Reconocer identificadores.
@@ -34,40 +35,54 @@ Además, el proyecto sigue una arquitectura modular orientada a objetos utilizan
 
 # Arquitectura del Proyecto
 
-El proyecto se encuentra dividido en distintas clases para organizar el funcionamiento del compilador:
+El proyecto se encuentra dividido en distintas clases para organizar el funcionamiento del compilador.
 
 ## FormPrincipal
+
 Contiene la interfaz gráfica del sistema y permite:
-- Crear archivos.
-- Abrir archivos.
-- Guardar archivos.
-- Ejecutar el análisis léxico.
-- Mostrar resultados del análisis.
+
+- Crear archivos
+- Abrir archivos
+- Guardar archivos
+- Ejecutar el análisis léxico
+- Mostrar resultados del análisis
+
+---
 
 ## Token
+
 Representa cada unidad léxica encontrada durante el análisis.
 
 Cada token contiene:
+
 - Línea
 - Código
 - Lexema
 - Tipo
 
+---
+
 ## UnidadesLexicas
+
 Contiene las tablas léxicas del lenguaje:
+
 - Palabras reservadas
 - Operadores
 - Delimitadores
 
+---
+
 ## AnalizadorLexico
+
 Es el núcleo principal del proyecto.
 
 Se encarga de:
-- Recorrer el código fuente carácter por carácter.
-- Ejecutar autómatas.
-- Clasificar tokens.
-- Detectar errores léxicos.
-- Generar la lista final de resultados.
+
+- Recorrer el código fuente carácter por carácter
+- Ejecutar autómatas
+- Clasificar tokens
+- Detectar errores léxicos
+- Generar la lista final de resultados
 
 ---
 
@@ -95,48 +110,73 @@ El analizador sigue un flujo basado en autómatas y diagramas de decisión.
 ## Autómata de Identificadores
 
 Permite reconocer:
+
 - Variables
 - Nombres válidos
 - Palabras reservadas
 
 Ejemplo:
+
 ```c
 int edad;
 float altura;
-Autómata Entero / Real
+```
+
+---
+
+## Autómata Entero / Real
 
 Permite detectar:
 
-Números enteros
-Números decimales
-Signos positivos y negativos
+- Números enteros
+- Números decimales
+- Signos positivos y negativos
 
 Ejemplo:
 
+```c
 10
 25.5
 -3
 +7
-Autómata de Comentarios
+```
+
+---
+
+## Autómata de Comentarios
 
 Permite reconocer comentarios de una línea utilizando:
 
+```c
 // comentario
-Detección de Errores Léxicos
+```
+
+---
+
+# Detección de Errores Léxicos
 
 El sistema detecta símbolos no válidos dentro del lenguaje.
 
 Ejemplo:
 
+```c
 @
 #
+```
 
 También detecta identificadores inválidos.
 
 Ejemplo:
 
+```c
 9edad
-Ejemplo de Código Analizado
+```
+
+---
+
+# Ejemplo de Código Analizado
+
+```c
 int main()
 {
     int edad = 20;
@@ -150,66 +190,97 @@ int main()
 
     return 0;
 }
-Resultado del Análisis
+```
+
+---
+
+# Resultado del Análisis
 
 El compilador genera una lista de tokens clasificando:
 
-Palabras reservadas
-Identificadores
-Operadores
-Delimitadores
-Números
-Comentarios
-Errores léxicos
-Capturas del Proyecto
-Interfaz gráfica
+- Palabras reservadas
+- Identificadores
+- Operadores
+- Delimitadores
+- Números
+- Comentarios
+- Errores léxicos
+
+---
+
+# Capturas del Proyecto
+
+## Interfaz gráfica
 
 Agregar captura aquí.
 
-Analizador Léxico funcionando
+---
+
+## Analizador Léxico funcionando
 
 Agregar captura aquí.
 
-Ejemplo de Tokens Generados
+---
+
+## Ejemplo de Tokens Generados
 
 Agregar captura aquí.
 
-Video Explicativo
-Explicación del proyecto y del analizador léxico
+---
+
+# Video Explicativo
+
+## Explicación del proyecto y del analizador léxico
 
 https://youtu.be/Bm8CbVcS4tY
 
-Ejemplo práctico de funcionamiento
+---
+
+## Ejemplo práctico de funcionamiento
 
 https://youtu.be/SZCwY-wceus
 
-Commits Realizados
-Commit	Descripción
-init	Creación inicial del repositorio
-feat	Interfaz gráfica base
-feat	Implementación de abrir archivos
-feat	Implementación de guardar archivos
-feat	Simulación de compilación
-feat	Implementación de análisis léxico
-feat	Detección de palabras reservadas
-feat	Detección de identificadores
-feat	Detección de números
-feat	Implementación de autómata de comentarios
-feat	Detección de errores léxicos
-docs	Actualización del README
-docs	Agregado de capturas
-docs	Agregado de videos demostrativos
-Conclusión
+---
+
+# Commits Realizados
+
+| Commit | Descripción |
+|---|---|
+| init | Creación inicial del repositorio |
+| feat | Interfaz gráfica base |
+| feat | Implementación de abrir archivos |
+| feat | Implementación de guardar archivos |
+| feat | Simulación de compilación |
+| feat | Implementación de análisis léxico |
+| feat | Detección de palabras reservadas |
+| feat | Detección de identificadores |
+| feat | Detección de números |
+| feat | Implementación de autómata de comentarios |
+| feat | Detección de errores léxicos |
+| docs | Actualización del README |
+| docs | Agregado de capturas |
+| docs | Agregado de videos demostrativos |
+
+---
+
+# Conclusión
 
 Este proyecto permitió comprender el funcionamiento interno de un compilador mediante la implementación de análisis léxico y teoría de autómatas.
 
 Además, permitió reforzar conocimientos de:
 
-Programación orientada a objetos.
-Estructuras léxicas.
-Diagramas de flujo.
-Procesamiento de cadenas.
-Diseño modular.
-Control de versiones con Git y GitHub.
+- Programación orientada a objetos
+- Estructuras léxicas
+- Diagramas de flujo
+- Procesamiento de cadenas
+- Diseño modular
+- Control de versiones con Git y GitHub
 
 El proyecto representa una simulación funcional de las primeras etapas de un compilador real.
+
+---
+
+# Autor
+
+**Luis Andrés**  
+Práctica fase final — Autómatas y Lenguajes
