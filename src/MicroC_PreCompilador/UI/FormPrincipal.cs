@@ -24,8 +24,6 @@ namespace MicroC_PreCompilador
             txtSalida.Clear();
         }
 
-
-
         private void btnCompilar_Click(object sender, EventArgs e)
         {
             txtSalida.Clear();
@@ -36,106 +34,23 @@ namespace MicroC_PreCompilador
                 return;
             }
 
-            string codigo = txtEditor.Text;
-            char[] caracteres = codigo.ToCharArray();
+            AnalizadorLexico analizador = new AnalizadorLexico();
 
-            string actual = "";
-            bool enString = false;
+            List<Token> resultado = analizador.Analizar(txtEditor.Text);
 
-            HashSet<string> reservadas = new HashSet<string>()
-    {
-        "int", "float", "if", "else", "while",
-        "for", "return", "main", "void"
-    };
-
-            for (int i = 0; i < caracteres.Length; i++)
+            foreach (Token token in resultado)
             {
-                char c = caracteres[i];
-
-                // 🔹 Manejo de strings
-                if (c == '"')
-                {
-                    if (enString)
-                    {
-                        actual += c;
-                        txtSalida.AppendText("STRING: " + actual + Environment.NewLine);
-                        actual = "";
-                        enString = false;
-                    }
-                    else
-                    {
-                        if (actual != "")
-                        {
-                            ClasificarToken(actual, reservadas);
-                            actual = "";
-                        }
-
-                        enString = true;
-                        actual += c;
-                    }
-                    continue;
-                }
-
-                if (enString)
-                {
-                    actual += c;
-                    continue;
-                }
-
-                // 🔹 Construcción de tokens
-                if (char.IsLetterOrDigit(c))
-                {
-                    actual += c;
-                }
-                else
-                {
-                    if (actual != "")
-                    {
-                        ClasificarToken(actual, reservadas);
-                        actual = "";
-                    }
-
-                    if (!char.IsWhiteSpace(c))
-                    {
-                        // 🔹 Operadores
-                        if ("+-*/=".Contains(c))
-                        {
-                            if (i + 1 < caracteres.Length && caracteres[i + 1] == '=')
-                            {
-                                txtSalida.AppendText("OPERADOR: " + c + "=" + Environment.NewLine);
-                                i++;
-                            }
-                            else
-                            {
-                                txtSalida.AppendText("OPERADOR: " + c + Environment.NewLine);
-                            }
-                        }
-                        // 🔹 Delimitadores
-                        else if (";(){}".Contains(c))
-                        {
-                            txtSalida.AppendText("DELIMITADOR: " + c + Environment.NewLine);
-                        }
-                        // 🔹 Error léxico
-                        else
-                        {
-                            txtSalida.AppendText("ERROR_LEXICO: " + c + Environment.NewLine);
-                        }
-                    }
-                }
-            }
-
-            // 🔹 Último token
-            if (actual != "")
-            {
-                ClasificarToken(actual, reservadas);
-            }
-
-            // 🔹 Error: string no cerrado
-            if (enString)
-            {
-                txtSalida.AppendText("ERROR_LEXICO: cadena no cerrada" + Environment.NewLine);
+                txtSalida.AppendText(
+                    "Línea: " + token.Linea +
+                    " | Token: " + token.Codigo +
+                    " | Lexema: " + token.Lexema +
+                    " | Tipo: " + token.Tipo +
+                    Environment.NewLine
+                );
             }
         }
+
+
 
         private void ClasificarToken(string token, HashSet<string> reservadas)
         {
