@@ -1,97 +1,215 @@
-# Pre-Compilador MicroC
+# MicroC_PreCompilador
 
-**Autor:** Luis Andrés  
-**Curso:** Autómatas y Lenguajes  
-**Universidad:** Universidad Mesoamericana  
-**Proyecto:** Pre-Compilador MicroC
+## Descripción del Proyecto
 
----
+MicroC_PreCompilador es una aplicación desarrollada en C# con Windows Forms que implementa las primeras etapas de un compilador para un lenguaje simplificado inspirado en C.
 
-# Descripción del Proyecto
+El proyecto fue creado con el objetivo de comprender el funcionamiento interno de un compilador, especialmente el análisis léxico, la clasificación de tokens y la aplicación de teoría de autómatas.
 
-El proyecto **Pre-Compilador MicroC** consiste en el desarrollo de una aplicación con interfaz gráfica que simula el comportamiento inicial de un compilador para un lenguaje simplificado llamado **MicroC**.
+El sistema permite:
+- Leer código fuente carácter por carácter.
+- Detectar palabras reservadas.
+- Reconocer identificadores.
+- Analizar números enteros y reales.
+- Detectar operadores y delimitadores.
+- Procesar comentarios.
+- Detectar errores léxicos.
+- Generar una lista de tokens.
 
-El sistema permite escribir o cargar código fuente desde archivos, gestionarlo mediante un editor integrado y ejecutar una simulación del proceso de compilación mostrando resultados en una consola interna.
-
-El objetivo principal del proyecto es aplicar los conceptos aprendidos en el curso de **Autómatas y Lenguajes**, comprendiendo las primeras fases del funcionamiento de un compilador, así como reforzar habilidades en desarrollo de software, diseño de interfaces y control de versiones con Git.
+Además, el proyecto sigue una arquitectura modular orientada a objetos utilizando clases separadas para el manejo de tokens, tablas léxicas y análisis del código fuente.
 
 ---
 
 # Tecnologías Utilizadas
 
-- **Lenguaje de programación:** C#
-- **Framework:** .NET / Windows Forms
-- **Entorno de desarrollo:** Visual Studio
-- **Control de versiones:** Git
-- **Repositorio:** GitHub
+| Tecnología | Uso |
+|---|---|
+| C# | Lenguaje principal |
+| Windows Forms | Interfaz gráfica |
+| .NET Framework | Entorno de desarrollo |
+| Visual Studio | IDE principal |
+| Git & GitHub | Control de versiones |
 
 ---
 
-# Funcionalidades del Sistema
+# Arquitectura del Proyecto
 
-La aplicación implementa las siguientes funcionalidades principales:
+El proyecto se encuentra dividido en distintas clases para organizar el funcionamiento del compilador:
 
-- Editor de código integrado
-- Consola de salida para mostrar resultados
-- Creación de nuevos archivos de código
-- Apertura de archivos existentes
-- Guardado de archivos
-- Simulación del proceso de compilación
-- Interfaz gráfica inspirada en un entorno de desarrollo (IDE)
+## FormPrincipal
+Contiene la interfaz gráfica del sistema y permite:
+- Crear archivos.
+- Abrir archivos.
+- Guardar archivos.
+- Ejecutar el análisis léxico.
+- Mostrar resultados del análisis.
 
----
+## Token
+Representa cada unidad léxica encontrada durante el análisis.
 
-# Instrucciones de Ejecución
+Cada token contiene:
+- Línea
+- Código
+- Lexema
+- Tipo
 
-Para ejecutar el proyecto se deben seguir los siguientes pasos:
+## UnidadesLexicas
+Contiene las tablas léxicas del lenguaje:
+- Palabras reservadas
+- Operadores
+- Delimitadores
 
-1. Clonar o descargar el repositorio desde GitHub.
-2. Abrir la solución del proyecto en **Visual Studio**.
-3. Compilar el proyecto.
-4. Ejecutar la aplicación.
-5. Utilizar el editor para escribir o abrir código fuente.
-6. Presionar el botón **Compilar** para simular el proceso de compilación.
+## AnalizadorLexico
+Es el núcleo principal del proyecto.
 
----
-
-# Historial de Commits
-
-| # | Commit | Descripción |
-|---|---|---|
-| 1 | init: estructura inicial del proyecto | Creación del repositorio y estructura base |
-| 2 | feat: interfaz gráfica inicial | Diseño de la ventana principal |
-| 3 | feat: implementación del editor de código | Área de edición de código |
-| 4 | feat: consola de salida | Panel para mostrar resultados |
-| 5 | feat: funcionalidad abrir archivo | Permite cargar archivos de código |
-| 6 | feat: funcionalidad guardar archivo | Permite guardar código editado |
-| 7 | feat: botón nuevo archivo | Limpia el editor para nuevo código |
-| 8 | feat: simulación de compilación | Muestra resultado en consola |
-| 9 | style: mejoras visuales de la interfaz | Ajustes de diseño inspirados en IDE |
-| 10 | docs: documentación del proyecto | Creación del README final |
+Se encarga de:
+- Recorrer el código fuente carácter por carácter.
+- Ejecutar autómatas.
+- Clasificar tokens.
+- Detectar errores léxicos.
+- Generar la lista final de resultados.
 
 ---
 
-# Capturas de la Interfaz
+# Funcionamiento del Analizador Léxico
 
-A continuación se muestran algunas capturas de la aplicación en ejecución.
+El analizador sigue un flujo basado en autómatas y diagramas de decisión.
 
+## Flujo principal
 
-<img width="742" height="492" alt="image" src="https://github.com/user-attachments/assets/c54213e4-42da-4d28-b4b6-7a4638d63ee1" />
-<img width="962" height="627" alt="image" src="https://github.com/user-attachments/assets/c7bd3d42-f5ee-472b-820a-f9f00bc4cf4b" />
-<img width="762" height="507" alt="image" src="https://github.com/user-attachments/assets/d309719e-6611-4fc8-872b-f3b156ab58fa" />
-
-
----
-
-# Video Demostrativo
-
-Se incluye un video demostrativo donde se muestra el funcionamiento del sistema.
-
-**Enlace al video:**  
-https://youtu.be/uW52Pl0jQss
+1. Leer carácter actual.
+2. Verificar si es letra o guion bajo.
+3. Ejecutar autómata de identificadores y palabras reservadas.
+4. Verificar si es número.
+5. Ejecutar autómata de números enteros y reales.
+6. Verificar si es comentario.
+7. Ejecutar autómata de comentarios.
+8. Detectar operadores y delimitadores.
+9. Detectar errores léxicos.
+10. Agregar token a la lista final.
 
 ---
 
-# Conclusión
+# Autómatas Implementados
 
-Este proyecto permitió comprender de manera práctica el funcionamiento de las primeras etapas de un compilador, así como desarrollar habilidades en diseño de interfaces, programación estructurada y control de versiones utilizando Git y GitHub.
+## Autómata de Identificadores
+
+Permite reconocer:
+- Variables
+- Nombres válidos
+- Palabras reservadas
+
+Ejemplo:
+```c
+int edad;
+float altura;
+Autómata Entero / Real
+
+Permite detectar:
+
+Números enteros
+Números decimales
+Signos positivos y negativos
+
+Ejemplo:
+
+10
+25.5
+-3
++7
+Autómata de Comentarios
+
+Permite reconocer comentarios de una línea utilizando:
+
+// comentario
+Detección de Errores Léxicos
+
+El sistema detecta símbolos no válidos dentro del lenguaje.
+
+Ejemplo:
+
+@
+#
+
+También detecta identificadores inválidos.
+
+Ejemplo:
+
+9edad
+Ejemplo de Código Analizado
+int main()
+{
+    int edad = 20;
+
+    // comentario
+
+    if (edad >= 18)
+    {
+        edad = edad + 1;
+    }
+
+    return 0;
+}
+Resultado del Análisis
+
+El compilador genera una lista de tokens clasificando:
+
+Palabras reservadas
+Identificadores
+Operadores
+Delimitadores
+Números
+Comentarios
+Errores léxicos
+Capturas del Proyecto
+Interfaz gráfica
+
+Agregar captura aquí.
+
+Analizador Léxico funcionando
+
+Agregar captura aquí.
+
+Ejemplo de Tokens Generados
+
+Agregar captura aquí.
+
+Video Explicativo
+Explicación del proyecto y del analizador léxico
+
+https://youtu.be/Bm8CbVcS4tY
+
+Ejemplo práctico de funcionamiento
+
+https://youtu.be/SZCwY-wceus
+
+Commits Realizados
+Commit	Descripción
+init	Creación inicial del repositorio
+feat	Interfaz gráfica base
+feat	Implementación de abrir archivos
+feat	Implementación de guardar archivos
+feat	Simulación de compilación
+feat	Implementación de análisis léxico
+feat	Detección de palabras reservadas
+feat	Detección de identificadores
+feat	Detección de números
+feat	Implementación de autómata de comentarios
+feat	Detección de errores léxicos
+docs	Actualización del README
+docs	Agregado de capturas
+docs	Agregado de videos demostrativos
+Conclusión
+
+Este proyecto permitió comprender el funcionamiento interno de un compilador mediante la implementación de análisis léxico y teoría de autómatas.
+
+Además, permitió reforzar conocimientos de:
+
+Programación orientada a objetos.
+Estructuras léxicas.
+Diagramas de flujo.
+Procesamiento de cadenas.
+Diseño modular.
+Control de versiones con Git y GitHub.
+
+El proyecto representa una simulación funcional de las primeras etapas de un compilador real.
