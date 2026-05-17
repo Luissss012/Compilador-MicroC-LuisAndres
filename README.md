@@ -212,19 +212,22 @@ El compilador genera una lista de tokens clasificando:
 
 ## Interfaz gráfica
 
-Agregar captura aquí.
+<img width="1902" height="1000" alt="image" src="https://github.com/user-attachments/assets/a0371feb-3e95-49de-b07d-8fc09b6f34ff" />
+
 
 ---
 
 ## Analizador Léxico funcionando
 
-Agregar captura aquí.
+<img width="838" height="873" alt="image" src="https://github.com/user-attachments/assets/2745efa5-2f4c-46aa-89af-d49f6b0b3d39" />
+
 
 ---
 
 ## Ejemplo de Tokens Generados
 
-Agregar captura aquí.
+<img width="647" height="208" alt="image" src="https://github.com/user-attachments/assets/786a185d-124b-41e2-8e3e-fcd5cb617a63" />
+
 
 ---
 
