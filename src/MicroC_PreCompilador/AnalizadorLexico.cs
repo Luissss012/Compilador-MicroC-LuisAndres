@@ -6,211 +6,347 @@ namespace MicroC_PreCompilador
 {
     public class AnalizadorLexico
     {
+        // Instancia de la clase que contiene
+        // palabras reservadas, operadores y delimitadores
         UnidadesLexicas unidades = new UnidadesLexicas();
 
+        // Método principal del analizador léxico
         public List<Token> Analizar(string codigo)
         {
+            // Lista donde se almacenarán los tokens encontrados
             List<Token> resultado = new List<Token>();
 
-            char[] caracteres = codigo.ToCharArray();
+            // Convertir el código a arreglo de caracteres
+            char[] archivo = codigo.ToCharArray();
 
-            string actual = "";
-            bool enString = false;
+            // Contador principal del recorrido
+            int cont = 0;
 
+            // Control de líneas
             int linea = 1;
 
-            for (int i = 0; i < caracteres.Length; i++)
+            // Mientras no termine el archivo
+            while (cont < archivo.Length)
             {
-                char c = caracteres[i];
+                // Obtener carácter actual
+                char c = archivo[cont];
 
-                // Contar líneas
-                if (c == '\n')
+                // ---------------------------------------------------
+                // ¿Es letra o guion bajo?
+                // Ejecutar función IdentificadorPalabraReservada
+                // ---------------------------------------------------
+                if (char.IsLetter(c) || c == '_')
+                {
+                    IdentificadorPalabraReservada(
+                        archivo,
+                        ref cont,
+                        resultado,
+                        linea
+                    );
+                }
+
+                // ---------------------------------------------------
+                // ¿Es número, punto, signo + o signo -?
+                // Ejecutar función EnteroReal
+                // ---------------------------------------------------
+                else if (
+                    char.IsDigit(c) ||
+                    c == '.' ||
+                    c == '+' ||
+                    c == '-'
+                )
+                {
+                    EnteroReal(
+                        archivo,
+                        ref cont,
+                        resultado,
+                        linea
+                    );
+                }
+
+                // ---------------------------------------------------
+                // ¿Es diagonal?
+                // Ejecutar función AutomataComentario
+                // ---------------------------------------------------
+                else if (c == '/')
+                {
+                    AutomataComentario(
+                        archivo,
+                        ref cont,
+                        resultado,
+                        linea
+                    );
+                }
+
+                // ---------------------------------------------------
+                // ¿Es espacio, tabulador o carácter nulo?
+                // Ignorar y avanzar
+                // ---------------------------------------------------
+                else if (
+                    c == ' ' ||
+                    c == '\t' ||
+                    c == '\0'
+                )
+                {
+                    cont++;
+                }
+
+                // ---------------------------------------------------
+                // ¿Es salto de línea o retorno de carro?
+                // Incrementar línea
+                // ---------------------------------------------------
+                else if (
+                    c == '\n' ||
+                    c == '\r'
+                )
                 {
                     linea++;
+                    cont++;
                 }
 
-                // Manejo de strings
-                if (c == '"')
+                // ---------------------------------------------------
+                // ¿Es delimitador?
+                // Agregar token
+                // ---------------------------------------------------
+                else if (
+                    unidades.Delimitadores.ContainsKey(c.ToString())
+                )
                 {
-                    if (enString)
+                    string lexema = c.ToString();
+
+                    resultado.Add(new Token
                     {
-                        actual += c;
+                        Linea = linea,
+                        Codigo = unidades.Delimitadores[lexema],
+                        Lexema = lexema,
+                        Tipo = "DELIMITADOR"
+                    });
 
-                        resultado.Add(new Token
-                        {
-                            Linea = linea,
-                            Codigo = 700,
-                            Lexema = actual,
-                            Tipo = "STRING"
-                        });
+                    cont++;
+                }
 
-                        actual = "";
-                        enString = false;
-                    }
-                    else
+                // ---------------------------------------------------
+                // ¿Es operador?
+                // Agregar token
+                // ---------------------------------------------------
+                else if (
+                    unidades.Operadores.ContainsKey(c.ToString())
+                )
+                {
+                    string lexema = c.ToString();
+
+                    resultado.Add(new Token
                     {
-                        if (actual != "")
-                        {
-                            ClasificarToken(actual, resultado, linea);
-                            actual = "";
-                        }
+                        Linea = linea,
+                        Codigo = unidades.Operadores[lexema],
+                        Lexema = lexema,
+                        Tipo = "OPERADOR"
+                    });
 
-                        enString = true;
-                        actual += c;
-                    }
-
-                    continue;
+                    cont++;
                 }
 
-                // Seguir construyendo string
-                if (enString)
-                {
-                    actual += c;
-                    continue;
-                }
-
-                // Letras y números
-                if (char.IsLetterOrDigit(c))
-                {
-                    actual += c;
-                }
+                // ---------------------------------------------------
+                // Símbolo no encontrado
+                // Error léxico
+                // ---------------------------------------------------
                 else
                 {
-                    // Clasificar token acumulado
-                    if (actual != "")
+                    resultado.Add(new Token
                     {
-                        ClasificarToken(actual, resultado, linea);
-                        actual = "";
-                    }
+                        Linea = linea,
+                        Codigo = -1,
+                        Lexema = c.ToString(),
+                        Tipo = "ERROR_LEXICO"
+                    });
 
-                    // Ignorar espacios
-                    if (!char.IsWhiteSpace(c))
-                    {
-                        string simbolo = c.ToString();
-
-                        // Operadores dobles
-                        if (i + 1 < caracteres.Length)
-                        {
-                            string doble = simbolo + caracteres[i + 1];
-
-                            if (unidades.Operadores.ContainsKey(doble))
-                            {
-                                resultado.Add(new Token
-                                {
-                                    Linea = linea,
-                                    Codigo = unidades.Operadores[doble],
-                                    Lexema = doble,
-                                    Tipo = "OPERADOR"
-                                });
-
-                                i++;
-                                continue;
-                            }
-                        }
-
-                        // Operadores simples
-                        if (unidades.Operadores.ContainsKey(simbolo))
-                        {
-                            resultado.Add(new Token
-                            {
-                                Linea = linea,
-                                Codigo = unidades.Operadores[simbolo],
-                                Lexema = simbolo,
-                                Tipo = "OPERADOR"
-                            });
-                        }
-                        // Delimitadores
-                        else if (unidades.Delimitadores.ContainsKey(simbolo))
-                        {
-                            resultado.Add(new Token
-                            {
-                                Linea = linea,
-                                Codigo = unidades.Delimitadores[simbolo],
-                                Lexema = simbolo,
-                                Tipo = "DELIMITADOR"
-                            });
-                        }
-                        // Error léxico
-                        else
-                        {
-                            resultado.Add(new Token
-                            {
-                                Linea = linea,
-                                Codigo = -1,
-                                Lexema = simbolo,
-                                Tipo = "ERROR_LEXICO"
-                            });
-                        }
-                    }
+                    cont++;
                 }
             }
 
-            // Último token
-            if (actual != "")
-            {
-                ClasificarToken(actual, resultado, linea);
-            }
-
-            // Error de string no cerrado
-            if (enString)
-            {
-                resultado.Add(new Token
-                {
-                    Linea = linea,
-                    Codigo = -1,
-                    Lexema = "cadena no cerrada",
-                    Tipo = "ERROR_LEXICO"
-                });
-            }
-
+            // Retornar lista final de tokens
             return resultado;
         }
 
-        private void ClasificarToken(string token, List<Token> resultado, int linea)
+        // =========================================================
+        // AUTOMATA IDENTIFICADOR / PALABRA RESERVADA
+        // =========================================================
+        private void IdentificadorPalabraReservada(
+            char[] archivo,
+            ref int cont,
+            List<Token> resultado,
+            int linea
+        )
         {
-            // Número
-            if (token.All(char.IsDigit))
+            string lexema = "";
+
+            // Construir lexema
+            while (
+                cont < archivo.Length &&
+                (
+                    char.IsLetterOrDigit(archivo[cont]) ||
+                    archivo[cont] == '_'
+                )
+            )
             {
-                resultado.Add(new Token
-                {
-                    Linea = linea,
-                    Codigo = 500,
-                    Lexema = token,
-                    Tipo = "NUMERO"
-                });
+                lexema += archivo[cont];
+                cont++;
             }
-            // Identificador inválido
-            else if (char.IsDigit(token[0]) && token.Any(char.IsLetter))
+
+            // ¿Es palabra reservada?
+            if (unidades.PalabrasReservadas.ContainsKey(lexema))
             {
                 resultado.Add(new Token
                 {
                     Linea = linea,
-                    Codigo = -1,
-                    Lexema = token,
-                    Tipo = "ERROR_LEXICO"
-                });
-            }
-            // Palabra reservada
-            else if (unidades.PalabrasReservadas.ContainsKey(token))
-            {
-                resultado.Add(new Token
-                {
-                    Linea = linea,
-                    Codigo = unidades.PalabrasReservadas[token],
-                    Lexema = token,
+                    Codigo = unidades.PalabrasReservadas[lexema],
+                    Lexema = lexema,
                     Tipo = "PALABRA_RESERVADA"
                 });
             }
-            // Identificador
+
+            // Si no, es identificador
             else
             {
                 resultado.Add(new Token
                 {
                     Linea = linea,
                     Codigo = 600,
-                    Lexema = token,
+                    Lexema = lexema,
                     Tipo = "IDENTIFICADOR"
                 });
+            }
+        }
+
+        // =========================================================
+        // AUTOMATA ENTERO / REAL
+        // =========================================================
+        private void EnteroReal(
+            char[] archivo,
+            ref int cont,
+            List<Token> resultado,
+            int linea
+        )
+        {
+            string lexema = "";
+            bool puntoDecimal = false;
+
+            // Signo opcional
+            if (
+                archivo[cont] == '+' ||
+                archivo[cont] == '-'
+            )
+            {
+                lexema += archivo[cont];
+                cont++;
+            }
+
+            // Construcción del número
+            while (cont < archivo.Length)
+            {
+                char c = archivo[cont];
+
+                // Números
+                if (char.IsDigit(c))
+                {
+                    lexema += c;
+                }
+
+                // Punto decimal
+                else if (c == '.' && !puntoDecimal)
+                {
+                    lexema += c;
+                    puntoDecimal = true;
+                }
+
+                else
+                {
+                    break;
+                }
+
+                cont++;
+            }
+
+            // Validar si realmente es número
+            double numero;
+
+            if (double.TryParse(lexema, out numero))
+            {
+                resultado.Add(new Token
+                {
+                    Linea = linea,
+                    Codigo = 500,
+                    Lexema = lexema,
+                    Tipo = "NUMERO"
+                });
+            }
+
+            // Error léxico
+            else
+            {
+                resultado.Add(new Token
+                {
+                    Linea = linea,
+                    Codigo = -1,
+                    Lexema = lexema,
+                    Tipo = "ERROR_LEXICO"
+                });
+            }
+        }
+
+        // =========================================================
+        // AUTOMATA COMENTARIO
+        // =========================================================
+        private void AutomataComentario(
+            char[] archivo,
+            ref int cont,
+            List<Token> resultado,
+            int linea
+        )
+        {
+            string lexema = "";
+
+            // Verificar si es comentario //
+            if (
+                cont + 1 < archivo.Length &&
+                archivo[cont + 1] == '/'
+            )
+            {
+                lexema += "//";
+
+                cont += 2;
+
+                // Leer comentario completo
+                while (
+                    cont < archivo.Length &&
+                    archivo[cont] != '\n'
+                )
+                {
+                    lexema += archivo[cont];
+                    cont++;
+                }
+
+                resultado.Add(new Token
+                {
+                    Linea = linea,
+                    Codigo = 800,
+                    Lexema = lexema,
+                    Tipo = "COMENTARIO"
+                });
+            }
+
+            // Si no es comentario, es operador división
+            else
+            {
+                resultado.Add(new Token
+                {
+                    Linea = linea,
+                    Codigo = unidades.Operadores["/"],
+                    Lexema = "/",
+                    Tipo = "OPERADOR"
+                });
+
+                cont++;
             }
         }
     }
